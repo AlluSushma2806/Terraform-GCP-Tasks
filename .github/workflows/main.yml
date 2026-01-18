@@ -1,0 +1,66 @@
+name: Terraform GCP VM Deployment (DEV & PROD)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  dev:
+    name: Terraform DEV
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_KEY }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Select DEV Workspace
+        run: |
+          terraform workspace select dev || terraform workspace new dev
+
+      - name: Terraform Apply (DEV)
+        run: terraform apply -auto-approve
+
+
+  prod:
+    name: Terraform PROD
+    needs: dev
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_KEY }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Select PROD Workspace
+        run: |
+          terraform workspace select prod || terraform workspace new prod
+
+      - name: Terraform Apply (PROD)
+        run: terraform apply -auto-approve
