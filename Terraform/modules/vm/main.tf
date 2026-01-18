@@ -1,7 +1,7 @@
 resource "google_compute_instance" "simple_vm" {
-  name         = "${terraform.workspace}-vm"
-  machine_type = var.machine_type
-  zone         = var.zone
+   name = "${terraform.workspace}-vm"
+   machine_type = var.machine_type
+   zone         = var.zone
 
   boot_disk {
     initialize_params {
