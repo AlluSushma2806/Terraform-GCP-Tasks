@@ -26,16 +26,16 @@ jobs:
           credentials_json: ${{ secrets.GCP_SERVICE_KEY }}
 
       - name: Terraform Init (DEV)
-        working-directory: terraform-vm
+        working-directory: Terraform-vm
         run: terraform init
 
       - name: Select DEV Workspace
-        working-directory: terraform-vm
+        working-directory: Terraform-vm
         run: |
           terraform workspace select dev || terraform workspace new dev
 
       - name: Terraform Apply (DEV)
-        working-directory: terraform-vm
+        working-directory: Terraform-vm
         run: terraform apply -auto-approve
 
 
@@ -59,14 +59,14 @@ jobs:
           credentials_json: ${{ secrets.GCP_SERVICE_KEY }}
 
       - name: Terraform Init (PROD)
-        working-directory: terraform-vm
+        working-directory: Terraform-vm
         run: terraform init
 
       - name: Select PROD Workspace
-        working-directory: terraform-vm
+        working-directory: Terraform-vm
         run: |
           terraform workspace select prod || terraform workspace new prod
 
       - name: Terraform Apply (PROD)
-        working-directory: terraform-vm
+        working-directory: Terraform-vm
         run: terraform apply -auto-approve
